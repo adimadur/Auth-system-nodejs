@@ -3,12 +3,16 @@ import dotenv from 'dotenv';
 import { authRouter } from "./routes/userRoutes.js";
 import { connectToDB } from "./config/connectToDb.js";
 import bodyParser from 'body-parser'
+import { errorHandler } from "./middlewares/errorHandler.js";
 dotenv.config();
 
 
 
 const app = express();
+
 app.use(bodyParser.json())
+app.use(errorHandler);
+
 app.listen(3000, (req, res) => {
 	console.log("Listening on port http://localhost:3000");
 	connectToDB();

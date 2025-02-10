@@ -1,12 +1,13 @@
 import { UserModel } from "../models/userModel.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { CustomError } from "../middlewares/errorHandler.js";
 
 const signup = async (req, res) => {
   try {
     const { username, firstName, lastName, password, age } = req.body;
 
-    const user = await UserModel.findOne({username});
+    const user = await UserModel.findOne({ username });
     if (user) {
       return res.status(400).json({
         message: "Username already exist",
@@ -37,11 +38,9 @@ const login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const user = await UserModel.findOne({username});
+    const user = await UserModel.findOne({ username });
     if (!user) {
-      return res.status(404).json({
-        message: "User not found",
-      });
+      throw new CustomError("User not found!", 404);
     }
 
     const passwordComparingResult = bcrypt.compare(password, user.password);
@@ -57,7 +56,7 @@ const login = async (req, res) => {
 
     return res.status(200).json({
       message: "User logged in successfully",
-      token
+      token,
     });
   } catch (error) {
     res.status(400).json({

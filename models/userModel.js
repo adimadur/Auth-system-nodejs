@@ -24,6 +24,11 @@ const userSchema = new mongoose.Schema(
       },
     },
     age: { type: Number },
+    role: {
+      type: String,
+      enum: ["User", "Admin"],
+      default: "User"
+    },
     username: {
       type: String,
       unique: [true, "Username already taken"],
@@ -40,4 +45,3 @@ const userSchema = new mongoose.Schema(
 );
 
 export const UserModel = mongoose.model("User", userSchema);
-

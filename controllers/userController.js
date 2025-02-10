@@ -52,7 +52,17 @@ const login = async (req, res) => {
     }
 
     const key = process.env.JWTSECRETKEY;
-    const token = jwt.sign({ username }, key, { expiresIn: "1d" });
+    const token = jwt.sign(
+      {
+        data: {
+          _id: user._id,
+          role: user.role,
+          username: user.username,
+        },
+      },
+      key,
+      { expiresIn: "1d" }
+    );
 
     return res.status(200).json({
       message: "User logged in successfully",
@@ -65,4 +75,24 @@ const login = async (req, res) => {
   }
 };
 
-export { signup, login };
+const deleteUserById = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    if (!id) {
+      throw new CustomError("Provide user Id", 404);
+    }
+    // const { userId } = req.user;
+
+    const deletedUser = await UserModel.findByIdAndDelete(id);
+
+    return res.status(200).json({
+      message: "User Deleted Successfully",
+      data: deletedUser,
+    });
+  } catch (error) {
+    next(error)
+  }
+};
+
+export { signup, login, deleteUserById };

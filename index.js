@@ -1,9 +1,9 @@
 import express from "express";
-import dotenv from 'dotenv';
 import { authRouter } from "./routes/userRoutes.js";
 import { connectToDB } from "./config/connectToDb.js";
 import bodyParser from 'body-parser'
 import { errorHandler } from "./middlewares/errorHandler.js";
+import dotenv from 'dotenv';
 dotenv.config();
 
 

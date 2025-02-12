@@ -16,11 +16,8 @@ const signup = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const userData = await UserModel.create({
-      username,
-      firstName,
-      lastName,
+      ...req.body,
       password: hashedPassword,
-      age,
     });
 
     return res.status(200).json({
@@ -91,7 +88,7 @@ const deleteUserById = async (req, res) => {
       data: deletedUser,
     });
   } catch (error) {
-    next(error)
+    next(error);
   }
 };
 
